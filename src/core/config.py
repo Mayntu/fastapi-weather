@@ -11,6 +11,15 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = "/api/v1"
     DEBUG: bool = True
 
+    WEATHER_API_KEY: str
+    WEATHER_API_URL: str = "https://api.weatherapi.com/v1/current.json"
+
+    DEFAULT_CITIES: list[str] = [
+        "Almaty,KZ",
+        "Astana,KZ",
+        "Berlin,DE",
+    ]
+
     class Config:
         env_file = ".env"
 
