@@ -2,9 +2,11 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
 
-from src.core import settings, validation_exception_handler, start_scheduler
+from src.core import settings, validation_exception_handler, start_scheduler, setup_logging
 from src.routers.v1 import weather_router
 from src.services import get_http_client
+
+setup_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

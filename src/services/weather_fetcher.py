@@ -1,6 +1,7 @@
 import httpx
 
 from datetime import datetime, timezone
+from loguru import logger as log
 
 from src.core import settings
 
@@ -11,9 +12,11 @@ class WeatherFetcher:
     async def fetch(self, city : str, country : str):
         params : dict = {
             "key" : settings.WEATHER_API_KEY,
-            "q": f"{city},{country}",
+            "q": f"{city}",
             "aqi" : "no",
         }
+        if country:
+            params["q"] += f",{country}"
 
         response = await self.client.get(
             settings.WEATHER_API_URL,
@@ -22,7 +25,9 @@ class WeatherFetcher:
         response.raise_for_status()
         
         data : dict = response.json()
-        print(data)
+        
+        country = data.get("location").get("country") if not country else country
+
         current : dict = data.get("current")
         if not current:
             raise ValueError("Weather not found")

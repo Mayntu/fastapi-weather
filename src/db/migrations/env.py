@@ -9,7 +9,6 @@ from alembic import context
 # 1. ИМПОРТИРУЕМ НАСТРОЙКИ И БАЗОВУЮ МОДЕЛЬ
 from src.core.config import settings
 from src.db import Base
-# Обязательно импортируй модель Weather, чтобы Alembic её "увидел"
 from src.models import Weather 
 
 config = context.config

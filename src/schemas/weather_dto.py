@@ -13,9 +13,12 @@ class WeatherBase(BaseModel):
     source: str
     fetched_at: datetime
 
+    class Config:
+        from_attributes = True
+
 
 class WeatherCreate(WeatherBase):
-    pass
+    country: str | None
 
 
 class WeatherUpdate(BaseModel):

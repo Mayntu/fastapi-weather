@@ -1,4 +1,5 @@
 from uuid import UUID
+from loguru import logger as log
 
 from src.models import Weather
 from src.repositories import WeatherRepository
@@ -19,10 +20,17 @@ class WeatherService:
         if not weather:
             raise WeatherNotFoundException(detail="Weather Not Found")
         
-        return weather
+        return WeatherRead.model_validate(weather)
     
-    async def get_many(self, city : str) -> list[WeatherRead]:
-        result : list[WeatherRead] = await self.repo.many(city=city)
+    async def get_latest_by_city(self, city : str) -> WeatherRead:
+        weather : Weather = await self.repo.get_latest_by_city(city)
+        if not weather:
+            raise WeatherNotFoundException()
+        
+        return WeatherRead.model_validate(weather)
+    
+    async def get_latest_all(self) -> list[WeatherRead]:
+        result : list[WeatherRead] = await self.repo.get_latest_for_all_cities()
         return result
 
     async def delete(self, id : UUID) -> None:
@@ -49,4 +57,5 @@ class WeatherService:
                 ),
             )
 
-        return await self.repo.create(WeatherCreate(**data))
+        weather_created : Weather = await self.repo.create(WeatherCreate(**data))
+        return WeatherRead.model_validate(weather_created)

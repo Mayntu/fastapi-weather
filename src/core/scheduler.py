@@ -6,7 +6,7 @@ from src.db.session import AsyncSessionLocal
 from src.repositories import WeatherRepository
 from src.services import WeatherFetcher, WeatherService, get_http_client
 
-from datetime import datetime
+from loguru import logger as log
 
 
 scheduler = AsyncIOScheduler()
@@ -23,7 +23,7 @@ async def refresh_all_cities():
             try:
                 await service.refresh_city(city, country)
             except Exception as e:
-                print(f"Failed to refresh {city}: {e}")
+                log.error(f"Failed to refresh {city}: {e}")
 
 
 def start_scheduler():

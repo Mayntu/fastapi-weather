@@ -1,4 +1,4 @@
-from sqlalchemy import select, Sequence
+from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models import Weather
@@ -40,3 +40,28 @@ class WeatherRepository:
     async def delete(self, weather: Weather) -> None:
         await self.session.delete(weather)
         await self.session.commit()
+
+    
+    async def get_latest_by_city(self, city: str) -> Weather | None:
+        """Возвращает одну последнюю запись для города"""
+        stmt = (
+            select(Weather)
+            .where(Weather.city.ilike(city))
+            .order_by(desc(Weather.fetched_at))
+            .limit(1)
+        )
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+    
+    async def get_latest_for_all_cities(self) -> list[Weather]:
+        """
+        Возвращает список самых свежих записей для каждого города.
+        """
+        stmt = (
+            select(Weather)
+            .distinct(Weather.city)
+            .order_by(Weather.city, desc(Weather.fetched_at))
+        )
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())
+
