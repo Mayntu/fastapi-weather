@@ -19,12 +19,12 @@
 
 1. **Создайте файл `.env**` в корневом каталоге на основе примера:
 ```bash
+DB_URL=postgresql+asyncpg://postgres:postgres@db:5432/weather
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_DATABASE=weather
 DB_HOST=db
-DB_URL=postgresql+asyncpg://postgres:postgres@db:5432/weather
-WEATHER_API_KEY=your_key_here
+WEATHER_API_KEY=YOUR_API_KEY
 
 ```
 
