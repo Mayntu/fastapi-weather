@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
 
-from src.core import settings, validation_exception_handler, start_scheduler, setup_logging
+from src.core import settings, validation_exception_handler, setup_logging
+from src.tasks import start_weather_scheduler
 from src.routers.v1 import weather_router
 from src.services import get_http_client
 
@@ -11,7 +12,7 @@ setup_logging()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     client = await get_http_client()
-    start_scheduler()
+    start_weather_scheduler()
 
     yield
 

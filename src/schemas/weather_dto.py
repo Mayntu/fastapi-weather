@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class WeatherBase(BaseModel):
@@ -13,8 +13,7 @@ class WeatherBase(BaseModel):
     source: str
     fetched_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class WeatherCreate(WeatherBase):
@@ -32,6 +31,3 @@ class WeatherRead(WeatherBase):
     id: UUID
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True

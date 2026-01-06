@@ -18,7 +18,7 @@ class WeatherService:
     async def get_by_id(self, id: UUID) -> WeatherRead:
         weather : Weather = await self.repo.get(id)
         if not weather:
-            raise WeatherNotFoundException(detail="Weather Not Found")
+            raise WeatherNotFoundException()
         
         return WeatherRead.model_validate(weather)
     
@@ -36,7 +36,7 @@ class WeatherService:
     async def delete(self, id : UUID) -> None:
         weather : Weather = await self.repo.get(id)
         if not weather:
-            raise WeatherNotFoundException(detail="Weather Not Found")
+            raise WeatherNotFoundException()
         
         await self.repo.delete(weather)
     

@@ -1,5 +1,4 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.config import settings
 from src.db.session import AsyncSessionLocal
