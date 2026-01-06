@@ -7,9 +7,11 @@ from src.schemas import WeatherCreate, WeatherUpdate
 
 class WeatherRepository:
     def __init__(self, session: AsyncSession):
+        """Инициализирует репозиторий с сессией базы данных."""
         self.session = session
 
     async def create(self, data: WeatherCreate) -> Weather:
+        """Создает новую запись о погоде."""
         weather : Weather = Weather(**data.model_dump())
         self.session.add(weather)
         await self.session.commit()
@@ -17,9 +19,11 @@ class WeatherRepository:
         return weather
 
     async def get(self, weather_id) -> Weather | None:
+        """Возвращает запись о погоде по ID."""
         return await self.session.get(Weather, weather_id)
 
     async def many(self, city: str | None = None) -> list[Weather]:
+        """Возвращает список всех записей о погоде, опционально фильтруя по городу."""
         stmt = select(Weather)
         if city:
             stmt = stmt.where(Weather.city == city)
@@ -30,6 +34,7 @@ class WeatherRepository:
     async def update(
         self, weather_to_update: Weather, weather_new_data: WeatherUpdate
     ) -> Weather:
+        """Обновляет существующую запись о погоде."""
         for field, value in weather_new_data.model_dump(exclude_unset=True).items():
             setattr(weather_to_update, field, value)
 
@@ -38,6 +43,7 @@ class WeatherRepository:
         return weather_to_update
 
     async def delete(self, weather: Weather) -> None:
+        """Удаляет запись о погоде."""
         await self.session.delete(weather)
         await self.session.commit()
 

@@ -13,6 +13,7 @@ router : APIRouter = APIRouter(prefix="/weather")
 async def list_weather(
     weather_service: WeatherService = Depends(get_weather_service),
 ):
+    """Возвращает список всей актуальной погоды."""
     return await weather_service.get_latest_all()
 
 
@@ -21,6 +22,7 @@ async def get_weather_by_id(
     weather_id: UUID,
     weather_service: WeatherService = Depends(get_weather_service),
 ):
+    """Возвращает погоду по ID."""
     return await weather_service.get_by_id(weather_id)
 
 
@@ -29,6 +31,7 @@ async def get_weather_by_city(
     city : str,
     weather_service: WeatherService = Depends(get_weather_service)
 ):
+    """Возвращает актуальную погоду для конкретного города."""
     return await weather_service.get_latest_by_city(city)
 
 
@@ -38,6 +41,7 @@ async def refresh_weather(
     country: str | None = None,
     service: WeatherService = Depends(get_weather_service),
 ):
+    """Обновляет или создает запись о погоде для города."""
     return await service.refresh_city(city, country)
 
 
@@ -46,4 +50,5 @@ async def delete_weather(
     weather_id: UUID,
     weather_service: WeatherService = Depends(get_weather_service)
 ):
+    """Удаляет запись о погоде."""
     await weather_service.delete(weather_id)
