@@ -1,11 +1,10 @@
+from loguru import logger as log
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from src.core.config import settings
 from src.db.session import AsyncSessionLocal
 from src.repositories import WeatherRepository
 from src.services import WeatherFetcher, WeatherService, get_http_client
-
-from loguru import logger as log
 
 
 scheduler = AsyncIOScheduler()

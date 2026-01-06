@@ -2,7 +2,8 @@ import pytest
 from uuid import uuid4
 from datetime import datetime, timezone
 
-from src.services import WeatherService, WeatherNotFoundException, WeatherFetcher
+from src.services import WeatherService, WeatherFetcher
+from src.exceptions import WeatherNotFoundException
 from src.models import Weather
 from src.repositories import WeatherRepository
 

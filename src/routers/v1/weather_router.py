@@ -1,16 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
-from src.db import get_session
+from fastapi import APIRouter, Depends
+
 from src.services import get_weather_service
-from src.services import WeatherService, WeatherNotFoundException
-from src.repositories import WeatherRepository
-from src.schemas import (
-    WeatherCreate,
-    WeatherRead,
-    WeatherUpdate,
-)
+from src.services import WeatherService
+from src.schemas import WeatherRead
+from src.exceptions import WeatherNotFoundException
 
 router : APIRouter = APIRouter(prefix="/weather")
 
@@ -26,10 +21,7 @@ async def get_weather_by_id(
     weather_id: UUID,
     weather_service: WeatherService = Depends(get_weather_service),
 ):
-    try:
-        return await weather_service.get_by_id(weather_id)
-    except WeatherNotFoundException:
-        raise HTTPException(status_code=404, detail="Weather not found")
+    return await weather_service.get_by_id(weather_id)
 
 
 @router.get("/city/{city}", response_model=WeatherRead)
@@ -37,10 +29,7 @@ async def get_weather_by_city(
     city : str,
     weather_service: WeatherService = Depends(get_weather_service)
 ):
-    try:
-        return await weather_service.get_latest_by_city(city)
-    except WeatherNotFoundException:
-        raise HTTPException(status_code=404, detail=f"Weather not found for city {city}")
+    return await weather_service.get_latest_by_city(city)
 
 
 @router.post("/refresh", response_model=WeatherRead)
@@ -49,10 +38,7 @@ async def refresh_weather(
     country: str | None = None,
     service: WeatherService = Depends(get_weather_service),
 ):
-    try:
-        return await service.refresh_city(city, country)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) 
+    return await service.refresh_city(city, country)
 
 
 @router.delete("/{weather_id}", status_code=204)
@@ -60,7 +46,4 @@ async def delete_weather(
     weather_id: UUID,
     weather_service: WeatherService = Depends(get_weather_service)
 ):
-    try:
-        await weather_service.delete(weather_id)
-    except WeatherNotFoundException:
-        raise HTTPException(status_code=404, detail="Weather not found")
+    await weather_service.delete(weather_id)

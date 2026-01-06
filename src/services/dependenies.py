@@ -1,9 +1,8 @@
+import httpx
 from fastapi import Depends
 
 from src.repositories import WeatherRepository, get_weather_repo
 from src.services import WeatherService, WeatherFetcher
-
-import httpx
 
 _client: httpx.AsyncClient | None = None
 

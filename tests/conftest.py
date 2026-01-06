@@ -1,6 +1,6 @@
 import pytest
-import asyncio
 from unittest.mock import AsyncMock
+
 from src.services import WeatherService
 
 @pytest.fixture

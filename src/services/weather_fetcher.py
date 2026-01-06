@@ -1,6 +1,6 @@
-import httpx
-
 from datetime import datetime, timezone
+
+import httpx
 from loguru import logger as log
 
 from src.core import settings

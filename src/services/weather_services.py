@@ -1,14 +1,13 @@
 from uuid import UUID
+
 from loguru import logger as log
 
 from src.models import Weather
 from src.repositories import WeatherRepository
 from src.services.weather_fetcher import WeatherFetcher
 from src.schemas import WeatherRead, WeatherUpdate, WeatherCreate
+from src.exceptions import WeatherNotFoundException
 
-class WeatherNotFoundException(Exception):
-    # status_code = 404
-    pass
 
 class WeatherService:
     def __init__(self, repo : WeatherRepository, weather_fetcher : WeatherFetcher):

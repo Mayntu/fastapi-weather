@@ -1,6 +1,7 @@
 import pytest
 from src.main import app
-from src.services import get_weather_service, WeatherNotFoundException, WeatherService
+from src.services import get_weather_service, WeatherService
+from src.exceptions import WeatherNotFoundException
 
 from httpx import AsyncClient, ASGITransport
 from unittest.mock import AsyncMock
@@ -37,7 +38,7 @@ async def test_get_city_weather_404(client : AsyncClient):
     response = await client.get("/api/v1/weather/city/NonExistent")
     
     assert response.status_code == 404
-    assert "Weather not found for city".lower() in response.json()["detail"].lower()
+    assert "weather not found".lower() in response.json()["message"].lower()
     
     app.dependency_overrides.clear()
 

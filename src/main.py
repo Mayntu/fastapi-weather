@@ -1,11 +1,18 @@
-from fastapi import FastAPI
-from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
 
-from src.core import settings, validation_exception_handler, setup_logging
+from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+
+from src.core import (
+    settings,
+    validation_exception_handler,
+    setup_logging,
+    weather_exception_handler
+)
 from src.tasks import start_weather_scheduler
-from src.routers.v1 import weather_router
 from src.services import get_http_client
+from src.routers.v1 import weather_router
+from src.exceptions import WeatherException
 
 setup_logging()
 
@@ -27,6 +34,7 @@ app.include_router(
 )
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(WeatherException, weather_exception_handler)
 
 if __name__ == "__main__":
     import uvicorn
